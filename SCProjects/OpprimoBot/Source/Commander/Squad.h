@@ -136,7 +136,7 @@ public:
 
 	/** Removes an agent of the specified type from this Squad,
 	 * and returns the reference to the removed agent. */
-	BaseAgent* removeMember(UnitType type);
+	virtual BaseAgent* removeMember(UnitType type);
 
 	/** Disbands this squad. */
 	void disband();

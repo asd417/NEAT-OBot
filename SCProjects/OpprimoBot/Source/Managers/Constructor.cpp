@@ -227,7 +227,7 @@ bool Constructor::supplyBeingBuilt()
 		{
 			if (a->getUnitType().getID() == supply.getID())
 			{
-				if (a->getUnit()->isBeingConstructed())
+				if (a->isBeingBuilt())
 				{
 					//Found one that is being constructed
 					return true;
@@ -636,7 +636,7 @@ bool Constructor::isBeingBuilt(UnitType type)
 	Agentset agents = AgentManager::getInstance()->getAgents();
 	for (auto &a : agents)
 	{
-		if (a->isOfType(type) && a->getUnit()->isBeingConstructed())
+		if (a->isOfType(type) && a->isBeingBuilt())
 		{
 			return true;
 		}
@@ -653,7 +653,7 @@ int Constructor::noInProduction(UnitType type)
 	{
 		if (a->isAlive())
 		{
-			if (a->getUnitType().canProduce() && !a->getUnit()->isBeingConstructed())
+			if (a->getUnitType().canProduce() && !a->isBeingBuilt())
 			{
 				for (auto &u : a->getUnit()->getTrainingQueue())
 				{

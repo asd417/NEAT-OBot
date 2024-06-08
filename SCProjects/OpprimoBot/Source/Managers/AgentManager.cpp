@@ -215,7 +215,7 @@ void AgentManager::computeActions()
 
 	for (auto &a : agents)
 	{
-		if (a->isAlive() && Broodwar->getFrameCount() - a->getLastOrderFrame() > 30)
+		if (a->isAlive())
 		{
 			a->computeActions();
 		}
@@ -301,7 +301,7 @@ int AgentManager::noInProduction(UnitType type)
 	{
 		if (a->isAlive())
 		{
-			if (a->isOfType(type) && a->getUnit()->isBeingConstructed())
+			if (a->isOfType(type) && a->isBeingBuilt())
 			{
 				cnt++;
 			}
@@ -316,7 +316,7 @@ bool AgentManager::hasBuilding(UnitType type)
 	{
 		if (a->isOfType(type) && a->isAlive())
 		{
-			if (!a->getUnit()->isBeingConstructed())
+			if (!a->isBeingBuilt())
 			{
 				return true;
 			}
@@ -348,7 +348,7 @@ int AgentManager::countNoFinishedUnits(UnitType type)
 	{
 		if (a->isAlive())
 		{
-			if (a->isOfType(type) &&a->isAlive() && !a->getUnit()->isBeingConstructed())
+			if (a->isOfType(type) && a->isAlive() && !a->isBeingBuilt())
 			{
 				cnt++;
 			}
@@ -364,7 +364,7 @@ int AgentManager::countNoBases()
 	{
 		if (a->isAlive())
 		{
-			if (a->getUnitType().isResourceDepot() && !a->getUnit()->isBeingConstructed())
+			if (a->getUnitType().isResourceDepot() && !a->isBeingBuilt())
 			{
 				cnt++;
 			}

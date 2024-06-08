@@ -1,0 +1,82 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Microsoft\VC\v150\Platforms\Win32\PlatformToolsets\v141_xp\Toolset.targets(39,5): warning MSB8051: Support for targeting Windows XP is deprecated and will not be present in future releases of Visual Studio. Please see https://go.microsoft.com/fwlink/?linkid=2023588 for more information.
+  AIloop.cpp
+  Commander.cpp
+  ExplorationSquad.cpp
+  ProtossMain.cpp
+  RushSquad.cpp
+  Squad.cpp
+  StrategySelector.cpp
+  TerranMain.cpp
+  UnitSetup.cpp
+  LurkerRush.cpp
+  ZergMain.cpp
+  Dll.cpp
+  MapManager.cpp
+c:\users\ylee5\documents\starcraft_research\opprimobot\scprojects\opprimobot\source\utils\polytool.h(18): warning C4522: 'BWAPI::PolyTool': multiple assignment operators specified
+  AgentFactory.cpp
+  BaseAgent.cpp
+  TargetingAgent.cpp
+  WorkerAgent.cpp
+  AgentManager.cpp
+  BuildingPlacer.cpp
+c:\users\ylee5\documents\starcraft_research\opprimobot\scprojects\opprimobot\source\managers\buildingplacer.cpp(726): warning C4996: 'BWAPI::Race::getCenter': getCenter() was renamed to getResourceDepot()
+  c:\users\ylee5\documents\starcraft_research\bwapi4_4\include\bwapi\race.h(70): note: see declaration of 'BWAPI::Race::getCenter'
+  BuildplanEntry.cpp
+  Compiling...
+  Constructor.cpp
+c:\users\ylee5\documents\starcraft_research\opprimobot\scprojects\opprimobot\source\managers\constructor.cpp(72): warning C4996: 'BWAPI::Race::getCenter': getCenter() was renamed to getResourceDepot()
+  c:\users\ylee5\documents\starcraft_research\bwapi4_4\include\bwapi\race.h(70): note: see declaration of 'BWAPI::Race::getCenter'
+  ExplorationManager.cpp
+c:\users\ylee5\documents\starcraft_research\opprimobot\scprojects\opprimobot\source\utils\polytool.h(18): warning C4522: 'BWAPI::PolyTool': multiple assignment operators specified
+  ResourceManager.cpp
+c:\users\ylee5\documents\starcraft_research\opprimobot\scprojects\opprimobot\source\managers\resourcemanager.cpp(7): warning C4996: 'BWAPI::Race::getCenter': getCenter() was renamed to getResourceDepot()
+  c:\users\ylee5\documents\starcraft_research\bwapi4_4\include\bwapi\race.h(70): note: see declaration of 'BWAPI::Race::getCenter'
+  SpottedObject.cpp
+  Upgrader.cpp
+  OpprimoBot.cpp
+  NavigationAgent.cpp
+  Pathfinder.cpp
+  PathObj.cpp
+  PFFunctions.cpp
+  NexusAgent.cpp
+  RefineryAgent.cpp
+  StructureAgent.cpp
+  CommandCenterAgent.cpp
+  ComsatAgent.cpp
+  HatcheryAgent.cpp
+  CarrierAgent.cpp
+  CorsairAgent.cpp
+  HighTemplarAgent.cpp
+  ReaverAgent.cpp
+  Compiling...
+  BattlecruiserAgent.cpp
+  FirebatAgent.cpp
+  GhostAgent.cpp
+  MarineAgent.cpp
+  MedicAgent.cpp
+  ScienceVesselAgent.cpp
+  SiegeTankAgent.cpp
+  VultureAgent.cpp
+  WraithAgent.cpp
+  TransportAgent.cpp
+  UnitAgent.cpp
+  DefilerAgent.cpp
+  HydraliskAgent.cpp
+  LurkerAgent.cpp
+  MutaliskAgent.cpp
+  QueenAgent.cpp
+  Config.cpp
+  cthread.cpp
+  polyTool.cpp
+c:\users\ylee5\documents\starcraft_research\opprimobot\scprojects\opprimobot\source\utils\polytool.h(18): warning C4522: 'BWAPI::PolyTool': multiple assignment operators specified
+  Profiler.cpp
+  Compiling...
+  ProfilerObj.cpp
+  Statistics.cpp
+     Creating library Release\OpprimoBot.lib and object Release\OpprimoBot.exp
+  Generating code
+  4508 of 6434 functions (70.1%) were compiled, the rest were copied from previous compilation.
+    732 functions were new in current compilation
+    351 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  OpprimoBot.vcxproj -> C:\Users\ylee5\Documents\Starcraft_Research\OpprimoBot\SCProjects\Release\OpprimoBot.dll

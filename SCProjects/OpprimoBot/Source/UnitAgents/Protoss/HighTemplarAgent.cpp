@@ -57,7 +57,7 @@ bool HighTemplarAgent::useAbilities()
 		}
 
 		//Morph to Archon	
-		if (!unit->isBeingConstructed())
+		if (!isBeingBuilt())
 		{
 			Squad* sq = Commander::getInstance()->getSquad(squadID);
 			if (sq != NULL)
@@ -118,7 +118,7 @@ BaseAgent* HighTemplarAgent::findArchonTarget()
 		Agentset agents = mSquad->getMembers();
 		for (auto &a : agents)
 		{
-			if (a->isAlive() && a->getUnitID() != unitID && a->isOfType(UnitTypes::Protoss_High_Templar) && !a->getUnit()->isBeingConstructed())
+			if (a->isAlive() && a->getUnitID() != unitID && a->isOfType(UnitTypes::Protoss_High_Templar) && !a->isBeingBuilt())
 			{
 				double dist = a->getUnit()->getPosition().getDistance(unit->getPosition());
 				if (dist <= 64)

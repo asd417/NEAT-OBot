@@ -42,6 +42,9 @@ public:
 
 	/** Returns true if this squad has an assigned goal. */
 	bool hasGoal();
+
+	/** Removes an agent from this Squad. This is disabled for Rush squads. */
+	BaseAgent* removeMember(UnitType type);
 };
 
 #endif

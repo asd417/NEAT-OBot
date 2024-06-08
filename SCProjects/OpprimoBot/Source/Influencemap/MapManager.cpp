@@ -2,13 +2,14 @@
 #include "../Managers/AgentManager.h"
 #include "../Managers/ExplorationManager.h"
 #include "../MainAgents/BaseAgent.h"
+#include "../Utils/polyTool.h"
 
 MapManager* MapManager::instance = NULL;
 
 MapManager::MapManager()
 {
 	//Add the regions for this map
-	for(BWTA::Region* r : BWTA::getRegions())
+	for (BWTA::Region* r : BWTA::getRegions())
 	{
 		MRegion* mr = new MRegion();
 		mr->region = r;
@@ -21,6 +22,12 @@ MapManager::MapManager()
 	for (BaseLocation* base : BWTA::getBaseLocations())
 	{
 		bases.insert(new BaseLocationItem(base->getTilePosition()));
+	}
+
+	//Add start locations for this map
+	for (BaseLocation* start : BWTA::getStartLocations())
+	{
+		starts.insert(new BaseLocationItem(start->getTilePosition()));
 	}
 }
 
@@ -71,11 +78,11 @@ bool MapManager::isValidChokepoint(const Chokepoint* cp)
 
 const BWTA::Chokepoint* MapManager::findGuardChokepoint(const MRegion* mr)
 {
-	for(Chokepoint* c : mr->region->getChokepoints())
+	for (Chokepoint* c : mr->region->getChokepoints())
 	{
 		if (isValidChokepoint(c))
 		{
-			pair<BWTA::Region*,BWTA::Region*> regions = c->getRegions();
+			pair<BWTA::Region*, BWTA::Region*> regions = c->getRegions();
 			if (regions.first->getCenter().x == mr->region->getCenter().x && regions.first->getCenter().y == mr->region->getCenter().y)
 			{
 				const MRegion* adj = getMapRegion(regions.second);
@@ -124,9 +131,11 @@ const BWTA::Chokepoint* MapManager::getDefenseLocation()
 
 MRegion* MapManager::getMapFor(Position p)
 {
-	for (auto &mr : map)
+	for (auto& mr : map)
 	{
-		if (mr->region->getPolygon().isInside(p))
+		
+		//if (mr->region->getPolygon().isInside(p))
+		if(PolyTool().pointIsInside(mr->region->getPolygon(), p))
 		{
 			return mr;
 		}
@@ -136,7 +145,7 @@ MRegion* MapManager::getMapFor(Position p)
 
 bool MapManager::hasEnemyInfluence()
 {
-	for (auto &mr : map)
+	for (auto& mr : map)
 	{
 		if (mr->inf_en_buildings > 0)
 		{
@@ -163,7 +172,16 @@ void MapManager::update()
 	}
 
 	//Update visited base locations
-	for (auto &a : bases)
+	for (auto& a : bases)
+	{
+		if (Broodwar->isVisible(a->baseLocation))
+		{
+			a->frameVisited = Broodwar->getFrameCount();
+		}
+	}
+
+	//Update visited start locations
+	for (auto& a : starts)
 	{
 		if (Broodwar->isVisible(a->baseLocation))
 		{
@@ -173,7 +191,7 @@ void MapManager::update()
 
 	//Update own influence
 	Agentset agents = AgentManager::getInstance()->getAgents();
-	for (auto &a : agents)
+	for (auto& a : agents)
 	{
 		if (a->isAlive())
 		{
@@ -229,7 +247,7 @@ void MapManager::update()
 	}
 
 	//Update enemy units influence
-	for (auto &u : Broodwar->enemy()->getUnits())
+	for (auto& u : Broodwar->enemy()->getUnits())
 	{
 		//Enemy seen
 		if (u->exists())
@@ -258,7 +276,8 @@ int MapManager::getOwnGroundInfluenceIn(TilePosition pos)
 {
 	for (MRegion* cm : map)
 	{
-		if (cm->region->getPolygon().isInside(Position(pos)))
+		//if (cm->region->getPolygon().isInside(Position(pos)))
+		if(PolyTool().pointIsInside(cm->region->getPolygon(), Position(pos)))
 		{
 			return cm->inf_own_ground;
 		}
@@ -270,7 +289,8 @@ int MapManager::getEnemyGroundInfluenceIn(TilePosition pos)
 {
 	for (MRegion* cm : map)
 	{
-		if (cm->region->getPolygon().isInside(Position(pos)))
+		//if (cm->region->getPolygon().isInside(Position(pos)))
+		if(PolyTool().pointIsInside(cm->region->getPolygon(), Position(pos)))
 		{
 			return cm->inf_en_ground;
 		}
@@ -282,7 +302,8 @@ bool MapManager::hasOwnInfluenceIn(TilePosition pos)
 {
 	for (MRegion* cm : map)
 	{
-		if (cm->inf_own_buildings > 0 && cm->region->getPolygon().isInside(Position(pos)))
+		//if (cm->inf_own_buildings > 0 && cm->region->getPolygon().isInside(Position(pos)))
+		if (cm->inf_own_buildings > 0 && PolyTool().pointIsInside(cm->region->getPolygon(), Position(pos)))
 		{
 			return true;
 		}
@@ -294,12 +315,58 @@ bool MapManager::hasEnemyInfluenceIn(TilePosition pos)
 {
 	for (MRegion* cm : map)
 	{
-		if (cm->inf_en_buildings > 0 && cm->region->getPolygon().isInside(Position(pos)))
+		//if (cm->inf_en_buildings > 0 && cm->region->getPolygon().isInside(Position(pos)))
+		if (cm->inf_en_buildings > 0 && PolyTool().pointIsInside(cm->region->getPolygon(), Position(pos)))
 		{
 			return true;
 		}
 	}
 	return false;
+}
+
+TilePosition MapManager::findRushPosition()
+{
+	MRegion* best = NULL;
+	for (MRegion* cm : map)
+	{
+		if (cm->inf_en_buildings > 0)
+		{
+			if (best == NULL)
+			{
+				best = cm;
+			}
+			else
+			{
+				//Launch an attack at the enemy controlled region with the
+				//lowest influence.
+				if (cm->inf_en_buildings < best->inf_en_buildings)
+				{
+					best = cm;
+				}
+			}
+		}
+	}
+
+	if (best != NULL)
+	{
+		return TilePosition(best->region->getCenter());
+	}
+	else
+	{
+		//No enemy building found. Move to starting positions.
+		int longestVisitFrame = Broodwar->getFrameCount();
+		TilePosition start = TilePosition(-1, -1);
+		for (auto& a : starts)
+		{
+			if (a->frameVisited < longestVisitFrame)
+			{
+				longestVisitFrame = a->frameVisited;
+				start = a->baseLocation;
+			}
+		}
+
+		return start;
+	}
 }
 
 TilePosition MapManager::findAttackPosition()
@@ -324,7 +391,7 @@ TilePosition MapManager::findAttackPosition()
 			}
 		}
 	}
-	
+
 	if (best != NULL)
 	{
 		return TilePosition(best->region->getCenter());
@@ -334,7 +401,7 @@ TilePosition MapManager::findAttackPosition()
 		//No enemy building found. Move to starting positions.
 		int longestVisitFrame = Broodwar->getFrameCount();
 		TilePosition base = TilePosition(-1, -1);
-		for (auto &a : bases)
+		for (auto& a : bases)
 		{
 			if (a->frameVisited < longestVisitFrame)
 			{
@@ -353,11 +420,11 @@ MapManager::~MapManager()
 	{
 		delete mr;
 	}
-	for (auto &a : bases)
+	for (auto& a : bases)
 	{
 		delete a;
 	}
-	
+
 	instance = NULL;
 }
 
@@ -380,7 +447,7 @@ void MapManager::printInfo()
 		int x2 = x1 + 110;
 		int y2 = y1 + 90;
 
-		Broodwar->drawBoxMap(x1,y1,x2,y2,Colors::Brown,true);
+		Broodwar->drawBoxMap(x1, y1, x2, y2, Colors::Brown, true);
 		Broodwar->drawTextMap(x1 + 5, y1, "Buildings own: %d", mr->inf_own_buildings);
 		Broodwar->drawTextMap(x1 + 5, y1 + 15, "Ground own: %d", mr->inf_own_ground);
 		Broodwar->drawTextMap(x1 + 5, y1 + 30, "Air own: %d", mr->inf_own_air);
@@ -390,12 +457,12 @@ void MapManager::printInfo()
 
 		//Print location of each chokepoint, and also if it is blocked
 		//as defense position.
-		for(Chokepoint* c : mr->region->getChokepoints())
+		for (Chokepoint* c : mr->region->getChokepoints())
 		{
 			x1 = c->getCenter().x;
 			y1 = c->getCenter().y;
 			Broodwar->drawTextMap(x1, y1, "(%d,%d)", x1, y1);
-			if (!isValidChokepoint(c)) Broodwar->drawTextMap(x1, y1+12, "Blocked");
+			if (!isValidChokepoint(c)) Broodwar->drawTextMap(x1, y1 + 12, "Blocked");
 		}
 		Broodwar->drawTextScreen(10, 120, "'%s'", Broodwar->mapFileName().c_str());
 	}

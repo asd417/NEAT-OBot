@@ -45,7 +45,7 @@ bool TransportAgent::isValidLoadUnit(BaseAgent* a)
 {
 	if (a->getUnitType().isFlyer()) return false;
 	if (a->getUnit()->isLoaded()) return false;
-	if (a->getUnit()->isBeingConstructed()) return false;
+	if (a->isBeingBuilt()) return false;
 	if (a->getUnitID() == unit->getID()) return false;
 	return true;
 }
@@ -78,7 +78,7 @@ BaseAgent* TransportAgent::findUnitToLoad(int spaceLimit)
 
 void TransportAgent::computeActions()
 {
-	if (unit->isBeingConstructed()) return;
+	if (isBeingBuilt()) return;
 
 	int currentLoad = getCurrentLoad();
 	int eCnt = enemyUnitsVisible();

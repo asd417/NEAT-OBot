@@ -1,6 +1,7 @@
 #include "LurkerRush.h"
 #include "../../Managers/BuildplanEntry.h"
 #include "../../Managers/AgentManager.h"
+#include "../../Influencemap/MapManager.h"
 #include "../RushSquad.h"
 #include "../ExplorationSquad.h"
 #include "../../Managers/ExplorationManager.h"
@@ -32,11 +33,16 @@ LurkerRush::LurkerRush()
 	sc1->setActivePriority(10);
 	squads.push_back(sc1);
 
-	sc2 = new RushSquad(5, "ScoutingSquad", 7);
-	sc2->addSetup(UnitTypes::Zerg_Zergling, 2);
-	sc2->setRequired(false);
-	sc2->setBuildup(false);
-	sc2->setActivePriority(1000);
+	int players = Broodwar->getStartLocations().size();
+	if (players > 2)
+	{
+		sc2 = new RushSquad(5, "ScoutingSquad", 7);
+		sc2->addSetup(UnitTypes::Zerg_Zergling, 2);
+		sc2->setRequired(false);
+		sc2->setBuildup(false);
+		sc2->setActivePriority(1000);
+		squads.push_back(sc2);
+	}
 
 	noWorkers = 8;
 	noWorkersPerRefinery = 3;
@@ -59,38 +65,24 @@ void LurkerRush::computeActions()
 
 	int cSupply = Broodwar->self()->supplyUsed() / 2;
 
-	if (stage == 0 && AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Zerg_Lair) > 0)
+	if (stage == 0 && AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Zerg_Lurker) > 0)
 	{
-		//Check if we have spotted any enemy buildings. If not, send
-		//out two Zerglings to rush base locations. Only needed for
-		//2+ player maps.
-		//This is needed to find out where the enemy is before we
-		//send out the Lurkers.
-		TilePosition tp = ExplorationManager::getInstance()->getClosestSpottedBuilding(Broodwar->self()->getStartLocation());
-		if (tp.x == -1 && Broodwar->getStartLocations().size() > 2)
-		{
-			squads.push_back(sc2);
-		}
-		stage++;
-	}
-	if (stage == 1 && AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Zerg_Lurker) > 0)
-	{
-		buildplan.push_back(BuildplanEntry(UnitTypes::Zerg_Spire, cSupply));
 		buildplan.push_back(BuildplanEntry(UnitTypes::Zerg_Hatchery, cSupply));
+		buildplan.push_back(BuildplanEntry(UnitTypes::Zerg_Spire, cSupply));
 
 		mainSquad->addSetup(UnitTypes::Zerg_Mutalisk, 20);
 		mainSquad->setBuildup(false);
 	
 		stage++;
 	}
-	if (stage == 2 && AgentManager::getInstance()->countNoBases() > 1)
+	if (stage == 1 && AgentManager::getInstance()->countNoBases() > 1)
 	{
 		buildplan.push_back(BuildplanEntry(UnitTypes::Zerg_Creep_Colony, cSupply));
 		buildplan.push_back(BuildplanEntry(UnitTypes::Zerg_Creep_Colony, cSupply));
 
 		stage++;
 	}
-	if (stage == 3 && AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Zerg_Sunken_Colony) > 0)
+	if (stage == 2 && AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Zerg_Sunken_Colony) > 0)
 	{		
 		buildplan.push_back(BuildplanEntry(UnitTypes::Zerg_Hatchery, cSupply));
 		

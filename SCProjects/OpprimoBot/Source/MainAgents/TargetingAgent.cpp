@@ -50,7 +50,7 @@ int TargetingAgent::getNoAttackers(BaseAgent* agent)
 bool TargetingAgent::checkTarget(BaseAgent* agent)
 {
 	if (!agent->getUnit()->isIdle() && !agent->getUnit()->isMoving()) return false;
-
+	
 	Unit pTarget = findTarget(agent);
 	if (pTarget != NULL && pTarget->getPlayer()->isEnemy(Broodwar->self()))
 	{
@@ -235,4 +235,18 @@ bool TargetingAgent::isCloakingUnit(UnitType type)
 {
 	if (type.isCloakable()) return true;
 	return false;
+}
+
+bool TargetingAgent::unitShallRetreat(Unit unit)
+{
+	bool retreat = false;
+	if (unit->getAirWeaponCooldown() > 10 || unit->getGroundWeaponCooldown() > 10)
+	{
+		if (unit->getType().getID() == UnitTypes::Protoss_Dragoon.getID()) retreat = true;
+		if (unit->getType().getID() == UnitTypes::Protoss_Scout.getID()) retreat = true;
+		if (unit->getType().getID() == UnitTypes::Zerg_Mutalisk.getID()) retreat = true;
+		if (unit->getType().getID() == UnitTypes::Zerg_Guardian.getID()) retreat = true;
+		if (unit->getType().getID() == UnitTypes::Terran_Wraith.getID()) retreat = true;
+	}
+	return false;//retreat;
 }

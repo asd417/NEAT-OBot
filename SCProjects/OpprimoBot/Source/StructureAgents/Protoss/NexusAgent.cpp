@@ -22,9 +22,11 @@ NexusAgent::NexusAgent(Unit mUnit)
 
 void NexusAgent::computeActions()
 {
+	if (Broodwar->getFrameCount() - lastOrderFrame < 10) return;
+
 	if (!hasSentWorkers)
 	{
-		if (!unit->isBeingConstructed())
+		if (!isBeingBuilt())
 		{
 			sendWorkers();
 			hasSentWorkers = true;
@@ -41,6 +43,8 @@ void NexusAgent::computeActions()
 		if (canBuild(worker))
 		{
 			unit->train(worker);
+			lastOrderFrame = Broodwar->getFrameCount();
+			return;
 		}
 	}
 }

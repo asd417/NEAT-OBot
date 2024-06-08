@@ -179,9 +179,8 @@ bool BaseAgent::isAlive()
 
 bool BaseAgent::isDamaged()
 {
-	if (unit->isBeingConstructed()) return false;
-	if (unit->getRemainingBuildTime() > 0) return false;
-
+	if (isBeingBuilt()) return false;
+	
 	if (unit->getHitPoints() < unit->getType().maxHitPoints())
 	{
 		return true;
@@ -276,5 +275,12 @@ void BaseAgent::addTrailPosition(WalkPosition wt)
 vector<WalkPosition> BaseAgent::getTrail()
 {
 	return trail;
+}
+
+bool BaseAgent::isBeingBuilt()
+{
+	if (unit->isBeingConstructed()) return true;
+	if (unit->getRemainingBuildTime() > 0) return true;
+	return false;
 }
 

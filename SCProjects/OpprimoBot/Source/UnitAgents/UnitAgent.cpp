@@ -25,26 +25,40 @@ UnitAgent::UnitAgent(Unit mUnit)
 void UnitAgent::computeActions()
 {
 	//Prio 1: Use abilities
-	if (useAbilities())
+	if (Broodwar->getFrameCount() - lastOrderFrame > 5)
 	{
-		lastOrderFrame = Broodwar->getFrameCount();
-		return;
-	}
-
-	//Prio 2: Attack enemy
-	if (TargetingAgent::checkTarget(this))
-	{
-		lastOrderFrame = Broodwar->getFrameCount();
-		return;
-	}
-
-	//Prio 3: Move
-	if (!unit->isLoaded() && !unit->isSieged() && !unit->isBurrowed())
-	{
-		if (NavigationAgent::getInstance()->computeMove(this, goal))
+		if (useAbilities())
 		{
 			lastOrderFrame = Broodwar->getFrameCount();
 			return;
+		}
+	}
+
+	//Prio 2: Attack enemy
+	if (Broodwar->getFrameCount() - lastOrderFrame > 5) //30
+	{
+		if (!TargetingAgent::unitShallRetreat(unit))
+		{
+			if (TargetingAgent::checkTarget(this))
+			{
+				lastOrderFrame = Broodwar->getFrameCount();
+				return;
+			}
+		}
+	}
+
+	//Don't move if the unit is attacking.
+	if (unit->isAttacking() || unit->isStartingAttack()) return;
+
+	//Prio 3: Move
+	if (Broodwar->getFrameCount() - lastOrderFrame > 10)
+	{
+		if (!unit->isLoaded() && !unit->isSieged() && !unit->isBurrowed())
+		{
+			if (NavigationAgent::getInstance()->computeMove(this, goal))
+			{
+				return;
+			}
 		}
 	}
 }

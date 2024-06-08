@@ -102,7 +102,7 @@ float PFFunctions::calcOwnUnitP(float d, WalkPosition wt, Unit unit, Unit otherO
 
 float PFFunctions::getTrailP(BaseAgent* agent, WalkPosition wt)
 {
-	if (agent->getUnit()->isBeingConstructed()) return 0;
+	if (agent->isBeingBuilt()) return 0;
 
 	float p = 0;
 	

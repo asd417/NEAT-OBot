@@ -31,9 +31,15 @@ public:
 	
 };
 
+class StartLocationSet : public SetContainer<BaseLocationItem*, std::hash<void*>>
+{
+public:
+
+};
+
 class Agentset : public SetContainer<BaseAgent*, std::hash<void*>> {
 public:
-	
+	//Agentset& Agentset::operator=(const Agentset&) = default;
 };
 
 #endif

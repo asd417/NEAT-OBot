@@ -341,17 +341,17 @@ bool BuildingPlacer::baseUnderConstruction(BaseAgent* base)
 {
 	if (Constructor::isTerran())
 	{
-		return base->getUnit()->isBeingConstructed();
+		return base->isBeingBuilt();
 	}
 	if (Constructor::isProtoss())
 	{
-		return base->getUnit()->isBeingConstructed();
+		return base->isBeingBuilt();
 	}
 	if (Constructor::isZerg())
 	{
 		if (base->isOfType(UnitTypes::Zerg_Hatchery))
 		{
-			return base->getUnit()->isBeingConstructed();
+			return base->isBeingBuilt();
 		}
 	}
 	return false;

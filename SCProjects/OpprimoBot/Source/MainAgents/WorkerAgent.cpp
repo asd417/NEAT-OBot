@@ -183,7 +183,7 @@ bool WorkerAgent::isFreeWorker()
 	if (toBuild.getID() != UnitTypes::None.getID()) return false;
 	if (unit->isConstructing()) return false;
 	Unit b = unit->getTarget();
-	if (b != NULL) if (b->isBeingConstructed()) return false;
+	if (b != NULL) if (b->getRemainingBuildTime() > 0) return false;
 	if (unit->isRepairing()) return false;
 	if (squadID != -1) return false;
 	
@@ -328,7 +328,7 @@ bool WorkerAgent::isBuilt()
 	if (unit->isConstructing()) return false;
 
 	Unit b = unit->getTarget();
-	if (b != NULL) if (b->isBeingConstructed()) return false;
+	if (b != NULL) if (b->getRemainingBuildTime() > 0) return false;
 
 	return true;
 }

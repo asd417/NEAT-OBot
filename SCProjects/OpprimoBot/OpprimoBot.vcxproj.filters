@@ -55,9 +55,6 @@
     <ClCompile Include="Source\Utils\Config.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Utils\FileReaderUtils.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utils\ProfilerObj.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -181,6 +178,9 @@
     <ClCompile Include="Source\Commander\Zerg\ZergMain.cpp">
       <Filter>Commander\Zerg</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utils\polyTool.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\OpprimoBot.h" />
@@ -234,9 +234,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utils\Config.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utils\FileReaderUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utils\ProfilerObj.h">
@@ -364,6 +361,9 @@
     </ClInclude>
     <ClInclude Include="Source\Commander\Zerg\ZergMain.h">
       <Filter>Commander\Zerg</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\polyTool.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

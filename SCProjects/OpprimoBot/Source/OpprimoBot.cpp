@@ -12,7 +12,6 @@
 #include "Utils/Config.h"
 #include "Commander/StrategySelector.h"
 #include "Utils/Statistics.h"
-
 #include "Managers/AgentManager.h"
 #include <Shlwapi.h>
 
@@ -26,7 +25,7 @@ void OpprimoBot::onStart()
 {
 	//Enable/disable file writing stuff
 	Profiler::getInstance()->disable();
-	Statistics::getInstance()->disable();
+	Statistics::getInstance()->enable();
 	StrategySelector::getInstance()->disable();
 
 	Profiler::getInstance()->start("OnInit");
@@ -38,7 +37,7 @@ void OpprimoBot::onStart()
 	//Broodwar->enableFlag(Flag::CompleteMapInformation);
 
 	//Analyze map using BWTA
-	BWTA::readMap();
+	//BWTA::readMap(); BWTA1 function?
 	analyzed = false;
 	analysis_just_finished = false;
 	//CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)AnalyzeThread, NULL, 0, NULL); //Threaded version
@@ -164,6 +163,11 @@ void OpprimoBot::onSendText(std::string text)
 	if (text == "a")
 	{
 		Commander::getInstance()->forceAttack();
+	}
+	else if (text == "c")
+	{
+		TilePosition tp = ExplorationManager::getInstance()->getClosestSpottedBuilding(Broodwar->self()->getStartLocation());
+		Broodwar << "Closest spotted enemy building is at (" << tp.x << "," << tp.y << ")" << endl;
 	}
 	else if (text == "p")
 	{

@@ -1,5 +1,6 @@
 #include "NavigationAgent.h"
 #include "PFFunctions.h"
+#include "../MainAgents/TargetingAgent.h"
 #include "../Managers/AgentManager.h"
 #include "../Influencemap/MapManager.h"
 #include "../Commander/Commander.h"
@@ -61,10 +62,10 @@ bool NavigationAgent::computeMove(BaseAgent* agent, TilePosition goal)
 		int enI = MapManager::getInstance()->getEnemyGroundInfluenceIn(agent->getUnit()->getTilePosition());
 		if (enI > ownI)
 		{
-			//Broodwar << "Retreat from (" << agent->getUnit()->getTilePosition().x << "," << agent->getUnit()->getTilePosition().y << " " << ownI << "<" << enI << endl;
 			Squad* sq = Commander::getInstance()->getSquad(agent->getSquadID());
-			if (sq != NULL && !sq->isExplorer())
+			if (sq != NULL && !sq->isExplorer() && !sq->isRush())
 			{
+				//Broodwar << "Retreat from (" << agent->getUnit()->getTilePosition().x << "," << agent->getUnit()->getTilePosition().y << " " << ownI << "<" << enI << endl;
 				TilePosition center = sq->getCenter();
 				if (center.getDistance(agent->getUnit()->getTilePosition()) >= 4 && !agent->getUnit()->isCloaked())
 				{
@@ -294,8 +295,9 @@ bool NavigationAgent::computeBoidsMove(BaseAgent* agent)
 	}
 
 	//If agent is retreating from an enemy unit or not
-	bool retreat = false;
-
+	//Only some units are allowed to use retreat
+	bool retreat = TargetingAgent::unitShallRetreat(agent->getUnit());
+	
 	//Iterate through enemies
 	for (auto &u : Broodwar->enemy()->getUnits())
 	{
@@ -469,8 +471,8 @@ bool NavigationAgent::computePathfindingMove(BaseAgent* agent, TilePosition goal
 	
 	if (goal.x != -1)
 	{
-		moveToGoal(agent, checkpoint, goal);
-		return true;
+		bool ok = moveToGoal(agent, checkpoint, goal);
+		return ok;
 	}
 	return false;
 }
@@ -478,7 +480,7 @@ bool NavigationAgent::computePathfindingMove(BaseAgent* agent, TilePosition goal
 void NavigationAgent::displayPF(BaseAgent* agent)
 {
 	Unit unit = agent->getUnit();
-	if (unit->isBeingConstructed()) return;
+	if (agent->isBeingBuilt()) return;
 
 	//PF
 	WalkPosition w = WalkPosition(agent->getUnit()->getPosition());
@@ -599,7 +601,12 @@ bool NavigationAgent::moveToGoal(BaseAgent* agent,  TilePosition checkpoint, Til
 		}
 	}
 	//Move
-	if (!unit->isMoving()) return unit->attack(toReach);
+	if (!unit->isMoving())
+	{
+		bool ok = unit->attack(toReach);
+		if (!ok) ok = unit->rightClick(toReach); //Sometimes Attack move fails. If so, use rightClick.
+		return ok;
+	}
 	else return true;
 }
 

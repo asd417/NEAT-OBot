@@ -35,14 +35,14 @@ void StructureAgent::debug_showGoal()
 	Color cColor = Colors::Blue;
 	int bar_h = 18;
 
-	if (unit->isBeingConstructed())
+	if (isBeingBuilt())
 	{
 		total = unit->getType().buildTime();
 		done = total - unit->getRemainingBuildTime();
 		txt = "";
 		bar_h = 8;
 	}
-	if (!unit->isBeingConstructed() && unit->getType().isResourceContainer())
+	if (!isBeingBuilt() && unit->getType().isResourceContainer())
 	{
 		total = unit->getInitialResources();
 		done = unit->getResources();
@@ -92,7 +92,7 @@ void StructureAgent::debug_showGoal()
 		Broodwar->drawTextMap(s.x + 5, s.y + 2, txt.c_str());
 	}
 
-	if (!unit->isBeingConstructed() && unit->getType().getID() == UnitTypes::Terran_Bunker.getID())
+	if (!isBeingBuilt() && unit->getType().getID() == UnitTypes::Terran_Bunker.getID())
 	{
 		int w = unit->getType().tileWidth() * 32;
 		int h = unit->getType().tileHeight() * 32;
@@ -116,75 +116,88 @@ void StructureAgent::debug_showGoal()
 
 void StructureAgent::computeActions()
 {
-	if (isAlive())
+	if (Broodwar->getFrameCount() - lastOrderFrame < 10) return;
+
+	if (!unit->isIdle()) return;
+
+	if (Upgrader::getInstance()->checkUpgrade(this))
 	{
-		if (!unit->isIdle()) return;
-
-		if (Upgrader::getInstance()->checkUpgrade(this)) return;
+		lastOrderFrame = Broodwar->getFrameCount();
+		return;
+	}
 		
-		if (Constructor::isTerran())
+	if (Constructor::isTerran())
+	{
+		//Check addons here
+		if (isOfType(UnitTypes::Terran_Science_Facility))
 		{
-			//Check addons here
-			if (isOfType(UnitTypes::Terran_Science_Facility))
+			if (unit->getAddon() == NULL)
 			{
-				if (unit->getAddon() == NULL)
-				{
-					unit->buildAddon(UnitTypes::Terran_Physics_Lab);
-				}
-			}
-			if (isOfType(UnitTypes::Terran_Starport))
-			{
-				if (unit->getAddon() == NULL)
-				{
-					unit->buildAddon(UnitTypes::Terran_Control_Tower);
-				}
-			}
-			if (isOfType(UnitTypes::Terran_Factory))
-			{
-				if (unit->getAddon() == NULL)
-				{
-					unit->buildAddon(UnitTypes::Terran_Machine_Shop);
-				}
-			}
-		}
-
-		if (!unit->isBeingConstructed() && unit->isIdle() && getUnit()->getType().canProduce())
-		{
-			//Iterate through all unit types
-			for (auto &u : UnitTypes::allUnitTypes())
-			{
-				//Check if we can (and need) to build the unit
-				if (canBuildUnit(u))
-				{
-					//Build it!
-					unit->train(u);
-				}
-			}
-		}
-
-		//Check for Spire upgrade
-		if (isOfType(UnitTypes::Zerg_Spire))
-		{
-			if (Broodwar->canMake(UnitTypes::Zerg_Greater_Spire, unit) && AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Zerg_Hive) > 0)
-			{
-				if (ResourceManager::getInstance()->hasResources(UnitTypes::Zerg_Greater_Spire))
-				{
-					ResourceManager::getInstance()->lockResources(UnitTypes::Zerg_Greater_Spire);
-					unit->morph(UnitTypes::Zerg_Greater_Spire);
-					return;
-				}
-			}
-		}
-
-		//Check for Creep Colony upgrade
-		if (isOfType(UnitTypes::Zerg_Creep_Colony))
-		{
-			if (ResourceManager::getInstance()->hasResources(UnitTypes::Zerg_Sunken_Colony))
-			{
-				ResourceManager::getInstance()->lockResources(UnitTypes::Zerg_Sunken_Colony);
-				unit->morph(UnitTypes::Zerg_Sunken_Colony);
+				unit->buildAddon(UnitTypes::Terran_Physics_Lab);
+				lastOrderFrame = Broodwar->getFrameCount();
 				return;
 			}
+		}
+		if (isOfType(UnitTypes::Terran_Starport))
+		{
+			if (unit->getAddon() == NULL)
+			{
+				unit->buildAddon(UnitTypes::Terran_Control_Tower);
+				lastOrderFrame = Broodwar->getFrameCount();
+				return;
+			}
+		}
+		if (isOfType(UnitTypes::Terran_Factory))
+		{
+			if (unit->getAddon() == NULL)
+			{
+				unit->buildAddon(UnitTypes::Terran_Machine_Shop);
+				lastOrderFrame = Broodwar->getFrameCount();
+				return;
+			}
+		}
+	}
+
+	if (!isBeingBuilt() && unit->isIdle() && getUnit()->getType().canProduce())
+	{
+		//Iterate through all unit types
+		for (auto &u : UnitTypes::allUnitTypes())
+		{
+			//Check if we can (and need) to build the unit
+			if (canBuildUnit(u))
+			{
+				//Build it!
+				unit->train(u);
+				lastOrderFrame = Broodwar->getFrameCount();
+				return;
+			}
+		}
+	}
+
+	//Check for Spire upgrade
+	if (isOfType(UnitTypes::Zerg_Spire))
+	{
+		if (Broodwar->canMake(UnitTypes::Zerg_Greater_Spire, unit) && AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Zerg_Hive) > 0)
+		{
+			if (ResourceManager::getInstance()->hasResources(UnitTypes::Zerg_Greater_Spire))
+			{
+				ResourceManager::getInstance()->lockResources(UnitTypes::Zerg_Greater_Spire);
+				unit->morph(UnitTypes::Zerg_Greater_Spire);
+				lastOrderFrame = Broodwar->getFrameCount();
+				return;
+			}
+		}
+	}
+
+	//Check for Creep Colony upgrade
+	if (isOfType(UnitTypes::Zerg_Creep_Colony))
+	{
+		if (ResourceManager::getInstance()->hasResources(UnitTypes::Zerg_Sunken_Colony))
+		{
+			ResourceManager::getInstance()->lockResources(UnitTypes::Zerg_Sunken_Colony);
+			unit->morph(UnitTypes::Zerg_Sunken_Colony);
+			lastOrderFrame = Broodwar->getFrameCount();
+			return;
 		}
 	}
 }
@@ -193,7 +206,7 @@ bool StructureAgent::canBuild(UnitType type)
 {
 	//1. Check if this unit can construct the unit
 	pair<UnitType, int> builder = type.whatBuilds();
-	if (builder.first.getID() != unit->getType().getID())
+	if (builder.first.getID() != unit->getType().getID() && (Broodwar->self()->getRace().getID() != Races::Zerg.getID()))
 	{
 		return false;
 	}

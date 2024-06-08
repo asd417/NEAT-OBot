@@ -169,7 +169,7 @@ bool Upgrader::canUpgrade(UpgradeType type, Unit unit)
 	}
 	
 	//4. Check if unit is being constructed
-	if (unit->isBeingConstructed())
+	if (AgentManager::getInstance()->getAgent(unit->getID())->isBeingBuilt())
 	{
 		return false;
 	}
@@ -222,7 +222,7 @@ bool Upgrader::canResearch(TechType type, Unit unit)
 	}
 
 	//4. Check if unit is being constructed
-	if (unit->isBeingConstructed())
+	if (AgentManager::getInstance()->getAgent(unit->getID())->isBeingBuilt())
 	{
 		return false;
 	}

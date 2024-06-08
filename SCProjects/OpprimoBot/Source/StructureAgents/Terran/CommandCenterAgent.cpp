@@ -22,9 +22,11 @@ CommandCenterAgent::CommandCenterAgent(Unit mUnit)
 
 void CommandCenterAgent::computeActions()
 {
+	if (Broodwar->getFrameCount() - lastOrderFrame < 10) return;
+
 	if (!hasSentWorkers)
 	{
-		if (!unit->isBeingConstructed())
+		if (!isBeingBuilt())
 		{
 			sendWorkers();
 			hasSentWorkers = true;
@@ -41,6 +43,7 @@ void CommandCenterAgent::computeActions()
 		if (Broodwar->canMake(UnitTypes::Terran_Comsat_Station, unit))
 		{
 			unit->buildAddon(UnitTypes::Terran_Comsat_Station);
+			lastOrderFrame = Broodwar->getFrameCount();
 			return;
 		}
 	}
@@ -51,6 +54,8 @@ void CommandCenterAgent::computeActions()
 		if (canBuild(worker))
 		{
 			unit->train(worker);
+			lastOrderFrame = Broodwar->getFrameCount();
+			return;
 		}
 	}
 
@@ -59,6 +64,8 @@ void CommandCenterAgent::computeActions()
 		if (canBuild(UnitTypes::Terran_SCV))
 		{
 			unit->train(UnitTypes::Terran_SCV);
+			lastOrderFrame = Broodwar->getFrameCount();
+			return;
 		}
 	}
 }

@@ -141,6 +141,9 @@ public:
 	/** Returns the PF pheromone trail. */
 	vector<WalkPosition> getTrail();
 
+	/** Returns true if this unit is currently under construction, false if it is finished. */
+	bool isBeingBuilt();
+
 };
 
 #endif

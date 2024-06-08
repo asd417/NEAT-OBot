@@ -15,6 +15,7 @@ ComsatAgent::ComsatAgent(Unit mUnit)
 
 void ComsatAgent::computeActions()
 {
+	if (Broodwar->getFrameCount() - lastOrderFrame < 10) return;
 	if (!unit->isIdle()) return;
 
 	if (Broodwar->getFrameCount() - lastSweepFrame > 100 && unit->getEnergy() >= 50)
@@ -34,6 +35,7 @@ void ComsatAgent::computeActions()
 						{
 							lastSweepFrame = Broodwar->getFrameCount();
 							lastSweepPos = u->getTilePosition();
+							lastOrderFrame = Broodwar->getFrameCount();
 							return;
 						}
 					}

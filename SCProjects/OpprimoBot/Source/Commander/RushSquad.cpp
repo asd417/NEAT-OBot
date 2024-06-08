@@ -1,6 +1,7 @@
 #include "RushSquad.h"
 #include "../Managers/AgentManager.h"
 #include "../Managers/ExplorationManager.h"
+#include "../Influencemap/MapManager.h"
 #include "Commander.h"
 
 RushSquad::RushSquad(int mId, string mName, int mPriority)
@@ -10,7 +11,7 @@ RushSquad::RushSquad(int mId, string mName, int mPriority)
 	this->moveType = AIR;
 	this->name = mName;
 	this->priority = mPriority;
-	activePriority = priority;
+	activePriority = 1000;
 	active = false;
 	required = false;
 	goal = Broodwar->self()->getStartLocation();
@@ -98,9 +99,10 @@ void RushSquad::computeActions()
 			}
 		}
 
-		TilePosition ePos = ExplorationManager::getInstance()->getClosestSpottedBuilding(Broodwar->self()->getStartLocation());
+		TilePosition ePos = MapManager::getInstance()->findRushPosition();
 		if (ePos.x != -1)
 		{
+			//Broodwar << "(" << ePos.x << "," << ePos.y << ")" << endl;
 			goal = ePos;
 			setMemberGoals(goal);
 		}
@@ -155,4 +157,9 @@ bool RushSquad::hasGoal()
 		return false;
 	}
 	return true;
+}
+
+BaseAgent* RushSquad::removeMember(UnitType type)
+{
+	return NULL;
 }

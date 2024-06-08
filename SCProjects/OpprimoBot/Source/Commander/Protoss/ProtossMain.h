@@ -17,6 +17,7 @@ private:
 	Squad* mainSquad;
 	Squad* stealthSquad;
 	Squad* detectorSquad;
+	Squad* sc1;
 
 public:
 	ProtossMain();

@@ -1,5 +1,6 @@
 #include "ExplorationManager.h"
 #include "BuildingPlacer.h"
+#include "../Utils/polyTool.h"
 
 ExplorationManager* ExplorationManager::instance = NULL;
 
@@ -212,7 +213,8 @@ int ExplorationManager::getSpottedInfluenceInRegion(const BWTA::Region* region)
 	int im = 0;
 	for (auto &a : enemy)
 	{
-		if (region->getPolygon().isInside(a->getPosition()))
+		//if (region->getPolygon().isInside(a->getPosition()))
+		if(PolyTool().pointIsInside(region->getPolygon(), a->getPosition()))
 		{
 			im += a->getType().buildScore();
 		}

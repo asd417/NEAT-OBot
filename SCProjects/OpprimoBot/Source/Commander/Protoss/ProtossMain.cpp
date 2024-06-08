@@ -30,6 +30,17 @@ ProtossMain::ProtossMain()
 	stealthSquad->setRequired(false);
 	stealthSquad->setBuildup(true);
 	squads.push_back(stealthSquad);
+
+	int players = Broodwar->getStartLocations().size();
+	if (players > 2)
+	{
+		sc1 = new RushSquad(5, "ScoutingSquad", 7);
+		sc1->addSetup(UnitTypes::Protoss_Zealot, 1);
+		sc1->setRequired(false);
+		sc1->setBuildup(false);
+		sc1->setActivePriority(1000);
+		squads.push_back(sc1);
+	}
 	
 	noWorkers = 16;
 	noWorkersPerRefinery = 3;
@@ -56,6 +67,7 @@ void ProtossMain::computeActions()
 	{
 		buildplan.push_back(BuildplanEntry(UnitTypes::Protoss_Photon_Cannon, cSupply));
 
+		buildplan.push_back(BuildplanEntry(UnitTypes::Protoss_Nexus, cSupply));
 		mainSquad->addSetup(UnitTypes::Protoss_Dragoon, 8);
 		mainSquad->addSetup(UnitTypes::Protoss_Scout, 5);
 		buildplan.push_back(BuildplanEntry(UpgradeTypes::Singularity_Charge, cSupply));

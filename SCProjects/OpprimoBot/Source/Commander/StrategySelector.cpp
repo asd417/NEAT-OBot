@@ -229,8 +229,7 @@ int StrategySelector::toInt(string &str)
 string StrategySelector::getFilename()
 {
 	stringstream ss;
-	ss << "bwapi-data\\AI\\";
-	//ss << "bwapi-data\\read\\"; //Tournament persistent storage version
+	ss << "bwapi-data\\read\\"; //Tournament persistent storage version
 	ss << "Strategies_OpprimoBot.csv";
 	
 	return ss.str();
@@ -239,8 +238,7 @@ string StrategySelector::getFilename()
 string StrategySelector::getWriteFilename()
 {
 	stringstream ss;
-	ss << "bwapi-data\\AI\\";
-	//ss << "bwapi-data\\write\\"; //Tournament persistent storage version
+	ss << "bwapi-data\\write\\"; //Tournament persistent storage version
 	ss << "Strategies_OpprimoBot.csv";
 	
 	return ss.str();

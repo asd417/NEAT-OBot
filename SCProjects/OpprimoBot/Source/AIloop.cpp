@@ -271,7 +271,7 @@ void AIloop::drawTerrainData()
 		//we will iterate through all the regions and draw the polygon outline of it in white.
 		for(BWTA::Region* r : BWTA::getRegions())
 		{
-			BWTA::Polygon p = r->getPolygon();
+			const BWTA::Polygon& p = r->getPolygon();
 			for(int j = 0; j < (int)p.size(); j++)
 			{
 				Position point1=p[j];

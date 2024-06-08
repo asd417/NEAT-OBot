@@ -30,7 +30,7 @@ Squad::Squad(int mId, int mType, string mName, int mPriority)
 	currentState = STATE_DEFEND;
 	buildup = false;
 	bunkerID = -1;
-	agents = Agentset();
+	agents = {};
 }
 
 string Squad::getName()
@@ -422,7 +422,7 @@ bool Squad::isFull()
 			if (a->isAlive())
 			{
 				if (a->getUnit() == NULL) return false;
-				if (a->getUnit()->isBeingConstructed()) return false;
+				if (a->isBeingBuilt()) return false;
 			}
 			else
 			{
@@ -821,7 +821,7 @@ int Squad::getSize()
 	int no = 0;
 	for (auto &a : agents)
 	{
-		if (a->isAlive() && !a->getUnit()->isBeingConstructed())
+		if (a->isAlive() && !a->isBeingBuilt())
 		{
 			no++;
 		}

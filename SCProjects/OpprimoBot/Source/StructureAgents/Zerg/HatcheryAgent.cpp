@@ -29,9 +29,11 @@ HatcheryAgent::HatcheryAgent(Unit mUnit)
 
 void HatcheryAgent::computeActions()
 {
+	if (Broodwar->getFrameCount() - lastOrderFrame < 10) return;
+
 	if (!hasSentWorkers)
 	{
-		if (!unit->isBeingConstructed())
+		if (!isBeingBuilt())
 		{
 			sendWorkers();
 			hasSentWorkers = true;
@@ -50,6 +52,7 @@ void HatcheryAgent::computeActions()
 			{
 				ResourceManager::getInstance()->lockResources(UnitTypes::Zerg_Lair);
 				unit->morph(UnitTypes::Zerg_Lair);
+				lastOrderFrame = Broodwar->getFrameCount();
 				return;
 			}
 		}
@@ -62,6 +65,7 @@ void HatcheryAgent::computeActions()
 			{
 				ResourceManager::getInstance()->lockResources(UnitTypes::Zerg_Hive);
 				unit->morph(UnitTypes::Zerg_Hive);
+				lastOrderFrame = Broodwar->getFrameCount();
 				return;
 			}
 		}
@@ -80,6 +84,7 @@ void HatcheryAgent::computeActions()
 		if (canBuild(UnitTypes::Zerg_Overlord))
 		{
 			unit->train(UnitTypes::Zerg_Overlord);
+			lastOrderFrame = Broodwar->getFrameCount();
 			return;
 		}
 	}
@@ -100,11 +105,17 @@ void HatcheryAgent::computeActions()
 		if (canBuild(worker))
 		{
 			unit->train(worker);
+			lastOrderFrame = Broodwar->getFrameCount();
+			return;
 		}
 	}
 	
 	//Check for upgrades
-	Upgrader::getInstance()->checkUpgrade(this);
+	if (Upgrader::getInstance()->checkUpgrade(this))
+	{
+		lastOrderFrame = Broodwar->getFrameCount();
+		return;
+	}
 }
 
 bool HatcheryAgent::checkBuildUnit(UnitType type)
@@ -112,6 +123,7 @@ bool HatcheryAgent::checkBuildUnit(UnitType type)
 	if (canEvolveUnit(type))
 	{
 		unit->train(type);
+		lastOrderFrame = Broodwar->getFrameCount();
 		return true;
 	}
 	return false;

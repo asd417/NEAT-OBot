@@ -40,6 +40,9 @@ public:
 	/** Checks the current target for an agent. If the agent has a bad target (for example
 	 * attacking a building and ignoring attacking units) a target switch is made. */
 	static bool checkTarget(BaseAgent* agent);
+
+	/** Checks if this unit shall retreat/kite. */
+	static bool unitShallRetreat(Unit unit);
 };
 
 #endif

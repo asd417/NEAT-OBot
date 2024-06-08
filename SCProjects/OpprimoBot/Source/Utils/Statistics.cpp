@@ -35,8 +35,7 @@ void Statistics::disable()
 string Statistics::getFilename()
 {
 	stringstream ss;
-	ss << "bwapi-data\\AI\\";
-	//ss << "bwapi-data\\write\\"; //Tournament persistent storage version
+	ss << "bwapi-data\\AI\\write\\"; //Tournament persistent storage version
 	ss << "Statistics_OpprimoBot.csv";
 	
 	return ss.str();

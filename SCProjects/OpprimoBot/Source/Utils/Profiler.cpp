@@ -81,7 +81,7 @@ void Profiler::dumpToFile()
 	if (!active) return;
 
 	ofstream ofile;
-	ofile.open("bwapi-data\\AI\\Profiling_OpprimoBot.html");
+	ofile.open("bwapi-data\\AI\\write\\Profiling_OpprimoBot.html");
 	
 	ofile << "<html><head>\n";
 	ofile << "<style type='text/css'>\n";

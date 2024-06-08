@@ -1,12 +1,40 @@
 #ifndef __MAPMANAGER_H__
 #define __MAPMANAGER_H__
 
+#pragma once
+
 #include <BWAPI.h>
 #include <BWTA.h>
+
+#include <map>
 #include "../Utils/Sets.h"
-using namespace BWAPI;
-using namespace BWTA;
-using namespace std;
+//using namespace BWAPI;
+//using namespace BWTA;
+//using namespace std;
+
+//#include <CGAL/Simple_cartesian.h>
+//#include <CGAL/Segment_Delaunay_graph_2.h>
+//#include <CGAL/Segment_Delaunay_graph_traits_2.h>
+//#include <CGAL/Polygon_2.h>
+
+//namespace CGAL {
+//
+//typedef CGAL::Simple_cartesian<leda_bigfloat>    CKD;
+//typedef CGAL::Polygon_2<CKD> PolygonD;
+//std::map<const BWTA::Polygon*, PolygonD> polygonDs;
+//}
+//using namespace CGAL;
+namespace BWAPI {
+
+	//template <typename T>
+	//struct CKD : Simple_cartesian<T> {};
+
+	//template <typename T>
+	//struct PolygonD : CGAL::Polygon_2<T> {};
+
+	//template <typename T>
+	//struct PointD : CGAL::Point_2<T> {};
+
 
 struct MRegion {
 	BWTA::Region* region;
@@ -43,6 +71,7 @@ class MapManager {
 private:
 	MRegionSet map;
 	BaseLocationSet bases;
+	StartLocationSet starts;
 	int lastCallFrame;
 	
 	MapManager();
@@ -73,6 +102,9 @@ public:
 	/** Returns a suitable position to attack the enemy at. */
 	TilePosition findAttackPosition();
 
+	/** Returns the closest spotted enemy building. If no building has been spotted, a player starting location is returned instead. */
+	TilePosition findRushPosition();
+
 	/** Checks if the player has infuence in the specified position. */
 	bool hasOwnInfluenceIn(TilePosition pos);
 
@@ -88,5 +120,8 @@ public:
 	/** Prints debug info to screen. */
 	void printInfo();
 };
+
+	
+}
 
 #endif
