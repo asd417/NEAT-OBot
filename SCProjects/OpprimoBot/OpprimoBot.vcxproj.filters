@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Source\Dll.cpp" />
-    <ClCompile Include="Source\OpprimoBot.cpp" />
+    <ClCompile Include="Source\NEATOBot.cpp" />
     <ClCompile Include="Source\AIloop.cpp" />
     <ClCompile Include="Source\Managers\BuildingPlacer.cpp">
       <Filter>Managers</Filter>
@@ -181,9 +181,33 @@
     <ClCompile Include="Source\Utils\polyTool.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Commander\NEAT\NEATOCommander.cpp">
+      <Filter>Commander\NEAT</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Commander\NEAT\db.cpp">
+      <Filter>Commander\NEAT</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UnitAgents\Protoss\ArbiterAgent.cpp">
+      <Filter>UnitAgents\Protoss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UnitAgents\Protoss\DarkTemplarAgent.cpp">
+      <Filter>UnitAgents\Protoss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UnitAgents\Protoss\DarkArchonAgent.cpp">
+      <Filter>UnitAgents\Protoss</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Commander\NEAT\NEATOSquad.cpp">
+      <Filter>Commander\NEAT</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Managers\NEAT\NEATOConstructor.cpp">
+      <Filter>Managers\NEAT</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Managers\NEAT\NEATOBuildplanEntry.cpp">
+      <Filter>Managers\NEAT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\OpprimoBot.h" />
+    <ClInclude Include="Source\NEATOBot.h" />
     <ClInclude Include="Source\AIloop.h" />
     <ClInclude Include="Source\Managers\BuildingPlacer.h">
       <Filter>Managers</Filter>
@@ -365,6 +389,30 @@
     <ClInclude Include="Source\Utils\polyTool.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Commander\NEAT\NEATOCommander.h">
+      <Filter>Commander\NEAT</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Commander\NEAT\db.h">
+      <Filter>Commander\NEAT</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UnitAgents\Protoss\ArbiterAgent.h">
+      <Filter>UnitAgents\Protoss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UnitAgents\Protoss\DarkTemplarAgent.h">
+      <Filter>UnitAgents\Protoss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UnitAgents\Protoss\DarkArchonAgent.h">
+      <Filter>UnitAgents\Protoss</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Commander\NEAT\NEATOSquad.h">
+      <Filter>Commander\NEAT</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\NEAT\NEATOConstructor.h">
+      <Filter>Managers\NEAT</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\NEAT\NEATOBuildplanEntry.h">
+      <Filter>Managers\NEAT</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Commander">
@@ -417,6 +465,12 @@
     </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{a6645a41-0aed-48c9-9906-b739d29c2c08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Commander\NEAT">
+      <UniqueIdentifier>{53084994-6eb7-4f1f-8bcf-63f27d8f9838}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\NEAT">
+      <UniqueIdentifier>{881cb206-bbf7-44f1-8071-6cfbf82bd2bd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

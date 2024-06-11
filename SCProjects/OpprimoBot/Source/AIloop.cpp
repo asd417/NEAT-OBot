@@ -60,15 +60,25 @@ void AIloop::computeActions()
 	Profiler::getInstance()->start("OnFrame_MapManager");
 	MapManager::getInstance()->update();
 	Profiler::getInstance()->end("OnFrame_MapManager");
+
+	//Build things that are in the buildplan
 	Profiler::getInstance()->start("OnFrame_Constructor");
 	Constructor::getInstance()->computeActions();
 	Profiler::getInstance()->end("OnFrame_Constructor");
+
+	// OpprimoBot uses separate commander class that derives the base Commander class for each races.
+	// For example, the protoss commander class when initialized creates hand-made build plan
+	// For NEAT-OBot, this should be changed to use NEAT Commander that generates build plan on the fly.
 	Profiler::getInstance()->start("OnFrame_Commander");
 	Commander::getInstance()->computeActions();
 	Profiler::getInstance()->end("OnFrame_Commander");
+
+	//
 	Profiler::getInstance()->start("OnFrame_ExplorationManager");
 	ExplorationManager::getInstance()->computeActions();
 	Profiler::getInstance()->end("OnFrame_ExplorationManager");
+
+	//OpprimoBot uses separate agents for every unit types that needs separate micro
 	Profiler::getInstance()->start("OnFrame_AgentManager");
 	AgentManager::getInstance()->computeActions();
 	Profiler::getInstance()->end("OnFrame_AgentManager");

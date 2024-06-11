@@ -124,7 +124,11 @@ BuildingPlacer* BuildingPlacer::getInstance()
 	return instance;
 }
 
-
+/// <summary>
+/// Finds closest builder
+/// </summary>
+/// <param name="spot"></param>
+/// <returns></returns>
 Unit BuildingPlacer::findWorker(TilePosition spot)
 {
 	BaseAgent* worker = AgentManager::getInstance()->findClosestFreeWorker(spot);

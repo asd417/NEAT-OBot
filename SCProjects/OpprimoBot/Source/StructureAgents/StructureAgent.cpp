@@ -1,10 +1,17 @@
 #include "StructureAgent.h"
+
+#define NEATO_COMMANDER
+
 #include "../Managers/AgentManager.h"
 #include "../Managers/Constructor.h"
 #include "../Managers/Upgrader.h"
 #include "../Commander/Commander.h"
+#ifdef NEATO_COMMANDER
+#include "../Commander/NEAT/NEATOCommander.h"
+#endif
 #include "../MainAgents/WorkerAgent.h"
 #include "../Managers/ResourceManager.h"
+
 
 StructureAgent::StructureAgent()
 {
@@ -222,6 +229,14 @@ bool StructureAgent::canBuild(UnitType type)
 	{
 		return false;
 	}
+#ifdef NEATO_COMMANDER
+	//4. Check if we need the unit in a squad
+	// NEATOCommander will also check if the unit is within the buildplan
+	if (!Commander::getInstance()->needUnit(type))
+	{
+		return false;
+	}
+#endif
 
 	//All clear. Build the unit.
 	return true;
@@ -241,13 +256,12 @@ bool StructureAgent::canBuildUnit(UnitType type)
 	{
 		return false;
 	}
-
 	//3. Check if we need the unit in a squad
 	if (!Commander::getInstance()->needUnit(type))
 	{
 		return false;
 	}
-	
+
 	//4. Check canBuild
 	if (!Broodwar->canMake(type, unit))
 	{

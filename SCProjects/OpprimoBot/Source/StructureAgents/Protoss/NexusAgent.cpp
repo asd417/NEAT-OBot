@@ -3,13 +3,15 @@
 #include "../../Managers/Constructor.h"
 #include "../../Commander/Commander.h"
 
+#define NEATO_COMMANDER
+
 NexusAgent::NexusAgent(Unit mUnit)
 {
 	unit = mUnit;
 	type = unit->getType();
 	unitID = unit->getID();
 	agentType = "NexusAgent";
-	
+
 	hasSentWorkers = false;
 	if (AgentManager::getInstance()->countNoUnits(UnitTypes::Protoss_Nexus) == 0)
 	{
@@ -22,6 +24,7 @@ NexusAgent::NexusAgent(Unit mUnit)
 
 void NexusAgent::computeActions()
 {
+
 	if (Broodwar->getFrameCount() - lastOrderFrame < 10) return;
 
 	if (!hasSentWorkers)
@@ -30,8 +33,9 @@ void NexusAgent::computeActions()
 		{
 			sendWorkers();
 			hasSentWorkers = true;
-
+#ifndef NEATO_COMMANDER
 			Constructor::getInstance()->addRefinery();
+#endif
 		}
 	}
 
@@ -47,4 +51,5 @@ void NexusAgent::computeActions()
 			return;
 		}
 	}
+
 }

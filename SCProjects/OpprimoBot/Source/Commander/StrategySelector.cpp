@@ -3,6 +3,7 @@
 #include "Terran/TerranMain.h"
 #include "Zerg/LurkerRush.h"
 #include "Zerg/ZergMain.h"
+#include "NEAT/NEATOCommander.h"
 #include <fstream>
 
 StrategySelector* StrategySelector::instance = NULL;
@@ -97,34 +98,37 @@ void StrategySelector::selectStrategy()
 
 Commander* StrategySelector::getStrategy()
 {
-	int tot = 0;
-	for (int i = 0; i < (int)stats.size(); i++)
-	{
-		if (stats.at(i).matches()) tot++;
-	}
+	//int tot = 0;
+	//for (int i = 0; i < (int)stats.size(); i++)
+	//{
+	//	if (stats.at(i).matches()) tot++;
+	//}
+	//
+	//if (tot > 0)
+	//{
+	//	//Select a strategy among the tested
+	//	//ones.
+	//	selectStrategy();
+	//}
+	//else
+	//{
+	//	//No strategy has been tested for this combo.
+	//	//Return one of the available strategies.
+	//	if (Broodwar->self()->getRace().getID() == Races::Terran.getID()) currentStrategyId = "TerranMain";
+	//	if (Broodwar->self()->getRace().getID() == Races::Protoss.getID()) currentStrategyId = "ProtossMain";
+	//	if (Broodwar->self()->getRace().getID() == Races::Zerg.getID()) currentStrategyId = "LurkerRush";
+	//}
+
+	////Get Commander for strategy
+	//if (currentStrategyId == "ProtossMain") return new ProtossMain();
+	//if (currentStrategyId == "TerranMain") return new TerranMain();
+	//if (currentStrategyId == "LurkerRush") return new LurkerRush();
+	//if (currentStrategyId == "ZergMain") return new ZergMain();
 	
-	if (tot > 0)
-	{
-		//Select a strategy among the tested
-		//ones.
-		selectStrategy();
-	}
-	else
-	{
-		//No strategy has been tested for this combo.
-		//Return one of the available strategies.
-		if (Broodwar->self()->getRace().getID() == Races::Terran.getID()) currentStrategyId = "TerranMain";
-		if (Broodwar->self()->getRace().getID() == Races::Protoss.getID()) currentStrategyId = "ProtossMain";
-		if (Broodwar->self()->getRace().getID() == Races::Zerg.getID()) currentStrategyId = "LurkerRush";
-	}
+	//return NULL;
 
-	//Get Commander for strategy
-	if (currentStrategyId == "ProtossMain") return new ProtossMain();
-	if (currentStrategyId == "TerranMain") return new TerranMain();
-	if (currentStrategyId == "LurkerRush") return new LurkerRush();
-	if (currentStrategyId == "ZergMain") return new ZergMain();
-
-	return NULL;
+	//Use NEAT based commander
+	return new NEATOCommander();
 }
 
 void StrategySelector::printInfo()

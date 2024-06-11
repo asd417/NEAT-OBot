@@ -14,7 +14,7 @@
     <ProjectGuid>{2E63AE74-758A-4607-9DE4-D28E814A6E13}</ProjectGuid>
     <RootNamespace>ExampleAIModule</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <ProjectName>OpprimoBot</ProjectName>
+    <ProjectName>NEAT-OBot</ProjectName>
     <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -44,7 +44,7 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>C:\Users\ylee5\Documents\Starcraft_Research\bwta2\lib;C:\Users\ylee5\Documents\Starcraft_Research\BWAPI4_4\Release;C:\Users\ylee5\Documents\Starcraft_Research\BWTAlib_2.2\lib;C:\local\CGAL-5.6.1\auxiliary\gmp\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\ylee5\Documents\Starcraft_Research\bwta2\lib;C:\Users\ylee5\Documents\Starcraft_Research\BWAPI4_4\Release;C:\Users\ylee5\Documents\Starcraft_Research\BWTAlib_2.2\lib;C:\local\CGAL-5.6.1\auxiliary\gmp\lib;C:\local\curl-8.8.0_1-win32-mingw\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -73,7 +73,7 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>C:/Users/ylee5/Documents/Starcraft_Research/BWAPI4_4/include;C:\Users\ylee5\Documents\Starcraft_Research\bwta2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:/Users/ylee5/Documents/Starcraft_Research/BWAPI4_4/include;C:\Users\ylee5\Documents\Starcraft_Research\bwta2\include;C:\local\curl-8.8.0_1-win32-mingw\include;C:\local\json-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NOMINMAX;WIN32;NDEBUG;_WINDOWS;_USRDLL;EXAMPLEAIMODULE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -90,13 +90,16 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <ImportLibrary>$(IntDir)$(TargetName).lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalDependencies>BWAPIClient.lib;BWAPILIB.lib;BWTA.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>BWAPIClient.lib;BWAPILIB.lib;BWTA.lib;libcurl_imp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\AIloop.cpp" />
     <ClCompile Include="Source\Commander\Commander.cpp" />
     <ClCompile Include="Source\Commander\ExplorationSquad.cpp" />
+    <ClCompile Include="Source\Commander\NEAT\db.cpp" />
+    <ClCompile Include="Source\Commander\NEAT\NEATOCommander.cpp" />
+    <ClCompile Include="Source\Commander\NEAT\NEATOSquad.cpp" />
     <ClCompile Include="Source\Commander\Protoss\ProtossMain.cpp" />
     <ClCompile Include="Source\Commander\RushSquad.cpp" />
     <ClCompile Include="Source\Commander\Squad.cpp" />
@@ -116,10 +119,12 @@
     <ClCompile Include="Source\Managers\BuildplanEntry.cpp" />
     <ClCompile Include="Source\Managers\Constructor.cpp" />
     <ClCompile Include="Source\Managers\ExplorationManager.cpp" />
+    <ClCompile Include="Source\Managers\NEAT\NEATOBuildplanEntry.cpp" />
+    <ClCompile Include="Source\Managers\NEAT\NEATOConstructor.cpp" />
     <ClCompile Include="Source\Managers\ResourceManager.cpp" />
     <ClCompile Include="Source\Managers\SpottedObject.cpp" />
     <ClCompile Include="Source\Managers\Upgrader.cpp" />
-    <ClCompile Include="Source\OpprimoBot.cpp" />
+    <ClCompile Include="Source\NEATOBot.cpp" />
     <ClCompile Include="Source\Pathfinding\NavigationAgent.cpp" />
     <ClCompile Include="Source\Pathfinding\Pathfinder.cpp" />
     <ClCompile Include="Source\Pathfinding\PathObj.cpp" />
@@ -130,8 +135,11 @@
     <ClCompile Include="Source\StructureAgents\Terran\CommandCenterAgent.cpp" />
     <ClCompile Include="Source\StructureAgents\Terran\ComsatAgent.cpp" />
     <ClCompile Include="Source\StructureAgents\Zerg\HatcheryAgent.cpp" />
+    <ClCompile Include="Source\UnitAgents\Protoss\ArbiterAgent.cpp" />
     <ClCompile Include="Source\UnitAgents\Protoss\CarrierAgent.cpp" />
     <ClCompile Include="Source\UnitAgents\Protoss\CorsairAgent.cpp" />
+    <ClCompile Include="Source\UnitAgents\Protoss\DarkArchonAgent.cpp" />
+    <ClCompile Include="Source\UnitAgents\Protoss\DarkTemplarAgent.cpp" />
     <ClCompile Include="Source\UnitAgents\Protoss\HighTemplarAgent.cpp" />
     <ClCompile Include="Source\UnitAgents\Protoss\ReaverAgent.cpp" />
     <ClCompile Include="Source\UnitAgents\Terran\BattlecruiserAgent.cpp" />
@@ -161,6 +169,9 @@
     <ClInclude Include="Source\AIloop.h" />
     <ClInclude Include="Source\Commander\Commander.h" />
     <ClInclude Include="Source\Commander\ExplorationSquad.h" />
+    <ClInclude Include="Source\Commander\NEAT\db.h" />
+    <ClInclude Include="Source\Commander\NEAT\NEATOCommander.h" />
+    <ClInclude Include="Source\Commander\NEAT\NEATOSquad.h" />
     <ClInclude Include="Source\Commander\Protoss\ProtossMain.h" />
     <ClInclude Include="Source\Commander\RushSquad.h" />
     <ClInclude Include="Source\Commander\Squad.h" />
@@ -179,10 +190,12 @@
     <ClInclude Include="Source\Managers\BuildplanEntry.h" />
     <ClInclude Include="Source\Managers\Constructor.h" />
     <ClInclude Include="Source\Managers\ExplorationManager.h" />
+    <ClInclude Include="Source\Managers\NEAT\NEATOBuildplanEntry.h" />
+    <ClInclude Include="Source\Managers\NEAT\NEATOConstructor.h" />
     <ClInclude Include="Source\Managers\ResourceManager.h" />
     <ClInclude Include="Source\Managers\SpottedObject.h" />
     <ClInclude Include="Source\Managers\Upgrader.h" />
-    <ClInclude Include="Source\OpprimoBot.h" />
+    <ClInclude Include="Source\NEATOBot.h" />
     <ClInclude Include="Source\Pathfinding\NavigationAgent.h" />
     <ClInclude Include="Source\Pathfinding\Pathfinder.h" />
     <ClInclude Include="Source\Pathfinding\PathObj.h" />
@@ -193,8 +206,11 @@
     <ClInclude Include="Source\StructureAgents\Terran\CommandCenterAgent.h" />
     <ClInclude Include="Source\StructureAgents\Terran\ComsatAgent.h" />
     <ClInclude Include="Source\StructureAgents\Zerg\HatcheryAgent.h" />
+    <ClInclude Include="Source\UnitAgents\Protoss\ArbiterAgent.h" />
     <ClInclude Include="Source\UnitAgents\Protoss\CarrierAgent.h" />
     <ClInclude Include="Source\UnitAgents\Protoss\CorsairAgent.h" />
+    <ClInclude Include="Source\UnitAgents\Protoss\DarkArchonAgent.h" />
+    <ClInclude Include="Source\UnitAgents\Protoss\DarkTemplarAgent.h" />
     <ClInclude Include="Source\UnitAgents\Protoss\HighTemplarAgent.h" />
     <ClInclude Include="Source\UnitAgents\Protoss\ReaverAgent.h" />
     <ClInclude Include="Source\UnitAgents\Terran\BattlecruiserAgent.h" />
